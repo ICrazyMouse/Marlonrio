@@ -30,7 +30,7 @@ cc.Class({
             cc.PhysicsManager.DrawBits.e_jointBit |
             cc.PhysicsManager.DrawBits.e_shapeBit
             ;
-        cc.director.getPhysicsManager().gravity = cc.v2(0, -640);
+        cc.director.getPhysicsManager().gravity = cc.v2(0, -3000);
 
         /**
          * 触摸监听
@@ -44,16 +44,13 @@ cc.Class({
             var rod = this.rod.getComponent("rod");
             rod.stopGrow();
             rod.fallDown();
-            // this.node.runAction(cc.sequence(
-            //     cc.callFunc(() => {
-            //         this.player.runAction(cc.moveBy(1, cc.v2(100, 0)));
-            //     }, this),
-            //     cc.delayTime(1.3),
-            //     cc.callFunc(() => {
-            //         this.player.runAction(cc.moveTo(1, cc.v2(-280, 33)));
-            //         this.ground.runAction(cc.moveTo(1, cc.v2(-323, -318)));
-            //     }, this)
-            // ));
+            this.node.runAction(cc.sequence(
+                cc.delayTime(1),
+                cc.callFunc(() => {
+                    this.player.runAction(cc.moveBy(3, cc.v2(500, 0)));
+                    // rod.resume(cc.v2(rod.node.x + 100, rod.node.y));
+                }, this)
+            ));
         }, this);
     },
 
