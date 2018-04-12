@@ -46,7 +46,7 @@ cc.Class({
 
     /**
      * 每帧调用
-     * @param {真实时间} dt 
+     * @param {number} dt 帧间隔时间
      */
     update(dt) {
         if (!this._completed) {

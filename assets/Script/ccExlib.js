@@ -2,7 +2,7 @@
 /**
  * 切换场景扩展方法
  * 会额外显示一个加载进度层
- * @param {sceneName} 切换至场景名
+ * @param {string} sceneName 切换至场景名
  */
 cc.director.loadSceneEx = function (sceneName) {
     var curScene = cc.director.getScene();

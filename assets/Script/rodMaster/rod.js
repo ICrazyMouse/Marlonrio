@@ -29,7 +29,7 @@ cc.Class({
 
     /**
      * 变长
-     * @param {时间} dt 
+     * @param {number} dt 帧间隔时间
      */
     grow(dt) {
         var midSize = this.mid.getContentSize();
@@ -102,6 +102,8 @@ cc.Class({
      * @param {目标位置} pos cc.v2
      */
     resume(pos) {
+        var dur = 0.5;
+
         this.head.setContentSize(this._headOriginSize);
         this.mid.setContentSize(this._midOriginSize);
         this.tail.setContentSize(this._tailOriginSize);
@@ -135,8 +137,8 @@ cc.Class({
         this.node.runAction(
             cc.sequence(
                 cc.spawn(
-                    cc.bezierTo(1, bezier),
-                    cc.rotateBy(1, 1800 - 90)
+                    cc.bezierTo(dur, bezier),
+                    cc.rotateBy(dur, 1800 - 90)
                 ),
                 cc.callFunc(() => {
                     var rodTotalSizeHeight = this.mid.getContentSize().height + this.tail.getContentSize().height + this.head.getContentSize().height;
@@ -150,5 +152,6 @@ cc.Class({
                 }, this)
             )
         );
+        return dur;
     }
 });

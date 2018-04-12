@@ -17,8 +17,8 @@ cc.Class({
 
     /**
      * 棍子西游
-     * @param {事件} event 
-     * @param {自定义数据} cusData 
+     * @param {event} event 事件
+     * @param {object} cusData 自定义数据
      */
     btnRodMasterClick(event, cusData) {
         cc.director.loadSceneEx("rodMasterMenuScene");
@@ -26,8 +26,8 @@ cc.Class({
 
     /**
      * 飞刀手
-     * @param {事件} event 
-     * @param {自定义数据} cusData 
+     * @param {event} event 事件
+     * @param {object} cusData 自定义数据
      */
     btnFlyCutterClick(event, cusData) {
         cc.director.loadSceneEx("flyCutterMenuScene");

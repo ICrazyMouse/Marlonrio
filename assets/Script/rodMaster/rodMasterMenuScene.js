@@ -15,8 +15,8 @@ cc.Class({
 
     /**
      * 开始
-     * @param {事件对象} event 
-     * @param {自定义数据} cusData 
+     * @param {event} event 事件
+     * @param {object} cusData 自定义数据
      */
     btnStartClick(event, cusData) {
         cc.director.loadSceneEx("rodMasterGameScene");
@@ -24,8 +24,8 @@ cc.Class({
 
     /**
      * 排行榜
-     * @param {事件对象} event 
-     * @param {自定义数据} cusData 
+     * @param {event} event 事件
+     * @param {object} cusData 自定义数据
      */
     btnRankClick(event, cusData) {
         
