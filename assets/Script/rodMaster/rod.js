@@ -64,12 +64,12 @@ cc.Class({
             var headSize = this.head.getContentSize();
             //用于检测PerFact,头部Collider
             if (collider.tag == 1) {
-                collider.size = cc.size(1, headSize.height);
+                collider.size = cc.size(headSize.width, headSize.height);
                 collider.offset = cc.v2(0, midSize.height + headSize.height * 1.5);
             }
             //杆体Collider
             else if (collider.tag == 0) {
-                collider.size = cc.size(1, midSize.height + tailSize.height);
+                collider.size = cc.size(midSize.width, midSize.height + tailSize.height);
                 collider.offset = cc.v2(0, collider.size.height / 2);
             }
         });
