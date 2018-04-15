@@ -67,8 +67,6 @@ cc.Class({
         this._timeLeft--;
         this.labCutDown.string = this._timeLeft + "s";
         if (this._timeLeft <= 0) {
-            // 取消倒计时
-            this.unschedule(this.cutDown);
             this.gameOver();
         }
     },
@@ -207,6 +205,8 @@ cc.Class({
      * 游戏结束
      */
     gameOver() {
+        // 取消倒计时
+        this.unschedule(this.cutDown);
         //大球停止运动
         this.mainBall.stopAllActions();
         this.node.off(cc.Node.EventType.TOUCH_START);
