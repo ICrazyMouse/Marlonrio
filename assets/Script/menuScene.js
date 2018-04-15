@@ -29,7 +29,7 @@ cc.Class({
      * @param {event} event 事件
      * @param {object} cusData 自定义数据
      */
-    btnFlyCutterClick(event, cusData) {
-        cc.director.loadSceneEx("flyCutterMenuScene");
+    btnNeedleClick(event, cusData) {
+        cc.director.loadSceneEx("needleMenuScene");
     }
 });
