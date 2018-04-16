@@ -262,8 +262,6 @@ cc.Class({
         }
     },
 
-
-
     /**
      * 重新开始
      * @param {Event} event 事件
