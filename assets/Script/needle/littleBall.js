@@ -67,5 +67,12 @@ cc.Class({
      */
     setColor(color) {
         this.ballTexture.color = color;
+    },
+    /**
+     * 设置针长度
+     * @param {number} length 针长度
+     */
+    setLength(length) {
+        this.needle.setContentSize(cc.size(2, length));
     }
 });

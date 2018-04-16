@@ -15,17 +15,28 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-        labScore: {
-            default: null,
-            type: cc.Label
-        },
         gameOverLayer: {
             default: null,
             type: cc.Node
         },
-        labCutDown: {
+        allFace: {
             default: null,
-            type: cc.Label
+            type: cc.Node
+        },
+        faceChangeThreshold: {
+            default: 2
+        },
+        spinSpeed: {
+            default: 90
+        },
+        gameRound: {
+            default: 1
+        },
+        radius: {
+            default: 300
+        },
+        startRotation: {
+            default: 45
         }
     },
 
@@ -34,10 +45,9 @@ cc.Class({
     onLoad() {
         this._prepareBallDistance = 80;
         this._randomColorIndex = 0;
-        this._mainBallRadis = 308;
         this._score = 0;
         this._timeLeft = 30;
-
+        this.radius = this.radius > 320 ? 320 : this.radius;
         this.gameOverLayer.active = false;
 
         /**
@@ -45,14 +55,17 @@ cc.Class({
         */
         cc.director.getCollisionManager().enabled = true;
         // cc.director.getCollisionManager().enabledDebugDraw = true;
-        // 初始化黑色小球
-        this.initPreBlackBall(4);
+        // 初始化障碍小球
+        this.initPreBlackBall(this.gameRound + 1);
         // 初始化预备小球
-        this.initNextBalls(3);
+        this.initNextBalls(4);
         // 大球旋转
+        this.mainBall.rotation = this.spinSpeed;
         this.mainBall.runAction(cc.repeatForever(
-            cc.rotateBy(3, 360)
+            cc.rotateBy(1, this.spinSpeed)
         ));
+        // 设置大球碰撞半径
+        this.mainBall.getComponent(cc.CircleCollider).radius = this.radius - 25;
         // 触摸事件
         this.node.on(cc.Node.EventType.TOUCH_START, this.emitNextLittleBall, this);
         // 倒计时
@@ -65,7 +78,6 @@ cc.Class({
      */
     cutDown(dt) {
         this._timeLeft--;
-        this.labCutDown.string = this._timeLeft + "s";
         if (this._timeLeft <= 0) {
             this.gameOver();
         }
@@ -76,8 +88,10 @@ cc.Class({
      * @param {Touch} touch 触摸对象
      */
     emitNextLittleBall(touch) {
+        // 触摸事件解除，防止连续点按发射两球，如果玩家得分会重新注册触摸事件
+        this.node.off(cc.Node.EventType.TOUCH_START);
         var nextBall = this._nextBalls.shift();
-        nextBall.runAction(cc.moveBy(0.1, cc.v2(0, 600)));
+        nextBall.runAction(cc.moveBy(0.3, cc.v2(0, 600)));
         // 旧的未发射两球上移
         this._nextBalls.forEach(ball => {
             ball.runAction(cc.moveBy(0.1, cc.v2(0, this._prepareBallDistance)));
@@ -91,41 +105,42 @@ cc.Class({
     },
 
     /**
-     * 初始化预设黑色小球
+     * 初始化预设障碍小球
      * @param {number} count 数量
      */
     initPreBlackBall(count) {
+        var preBallColor = this.randomColor();
         switch (count) {
             case 4:
                 var newBall = this.createNewLittleBall();
                 var littleBall = newBall.getComponent("littleBall");
-                littleBall.setColor(new cc.color({ r: 0, g: 0, b: 0, a: 255 }));//黑色
+                littleBall.setColor(preBallColor);
                 littleBall.needle.active = true;
-                newBall.setPosition(cc.v2(-this._mainBallRadis, 0));
+                newBall.setPosition(cc.v2(-this.radius, 0));
                 newBall.rotation = 90;
                 this.mainBall.addChild(newBall);
             case 3:
                 var newBall = this.createNewLittleBall();
                 var littleBall = newBall.getComponent("littleBall");
-                littleBall.setColor(new cc.color({ r: 0, g: 0, b: 0, a: 255 }));//黑色
+                littleBall.setColor(preBallColor);
                 littleBall.needle.active = true;
-                newBall.setPosition(cc.v2(this._mainBallRadis, 0));
+                newBall.setPosition(cc.v2(this.radius, 0));
                 newBall.rotation = 270;
                 this.mainBall.addChild(newBall);
             case 2:
                 var newBall = this.createNewLittleBall();
                 var littleBall = newBall.getComponent("littleBall");
-                littleBall.setColor(new cc.color({ r: 0, g: 0, b: 0, a: 255 }));//黑色
+                littleBall.setColor(preBallColor);
                 littleBall.needle.active = true;
-                newBall.setPosition(cc.v2(0, -this._mainBallRadis));
+                newBall.setPosition(cc.v2(0, -this.radius));
                 newBall.rotation = 0;
                 this.mainBall.addChild(newBall);
             case 1:
                 var newBall = this.createNewLittleBall();
                 var littleBall = newBall.getComponent("littleBall");
-                littleBall.setColor(new cc.color({ r: 0, g: 0, b: 0, a: 255 }));//黑色
+                littleBall.setColor(preBallColor);
                 littleBall.needle.active = true;
-                newBall.setPosition(cc.v2(0, this._mainBallRadis));
+                newBall.setPosition(cc.v2(0, this.radius));
                 newBall.rotation = 180;
                 this.mainBall.addChild(newBall);
         }
@@ -138,7 +153,7 @@ cc.Class({
         this._nextBalls = [];
         for (var i = 0; i < count; i++) {
             var newBall = this.createNewLittleBall();
-            newBall.y = (1 - i) * this._prepareBallDistance;
+            newBall.y = (2 - i) * this._prepareBallDistance;
             this.prepareBall.addChild(newBall);
             this._nextBalls.push(newBall);
         }
@@ -149,6 +164,7 @@ cc.Class({
     createNewLittleBall() {
         var newBall = cc.instantiate(this.prbLittleBall);
         var littleBall = newBall.getComponent("littleBall");
+        littleBall.setLength(this.radius);
         littleBall.setColor(this.randomColor());
         littleBall.needle.active = false;
         /**小球碰小球 */
@@ -173,6 +189,8 @@ cc.Class({
      */
     onCollideLittleBall(event) {
         cc.log(event.message);
+        // 触摸事件解除，防止连续点按发射两球，如果玩家得分会重新注册触摸事件
+        this.node.off(cc.Node.EventType.TOUCH_START);
         //小球停止运动
         var littleBall = event.littleBall;
         littleBall.stopAllActions();
@@ -193,13 +211,20 @@ cc.Class({
         // 根据大球rotation，计算小球位置
         var rot = this.mainBall.rotation;
         littleBall.rotation = - rot;
-        var newBallX = Math.sin(rot * 0.017453293) * this._mainBallRadis;
-        var newBallY = -Math.cos(rot * 0.017453293) * this._mainBallRadis;
+        var newBallX = Math.sin(rot * 0.017453293) * this.radius;
+        var newBallY = -Math.cos(rot * 0.017453293) * this.radius;
         littleBall.x = newBallX;
         littleBall.y = newBallY;
         // 加分
         this._score++;
-        this.labScore.string = this._score;
+        // 根据分数变脸
+        var faceFadeIndex = parseInt(this._score / this.faceChangeThreshold);
+        var faceToFade = this.allFace.getChildByName("face_" + faceFadeIndex);
+        if (faceToFade && faceToFade.opacity > 0 && faceFadeIndex < 4) {
+            faceToFade.runAction(cc.fadeOut(0.3));
+        }
+        // 触摸事件
+        this.node.on(cc.Node.EventType.TOUCH_START, this.emitNextLittleBall, this);
     },
     /**
      * 游戏结束
@@ -230,10 +255,10 @@ cc.Class({
         this._randomColorIndex++;
         this._randomColorIndex = this._randomColorIndex > 4 ? 1 : this._randomColorIndex;
         switch (this._randomColorIndex) {
-            case 1: return new cc.color({ r: 255, g: 0, b: 0, a: 255 });
-            case 2: return new cc.color({ r: 0, g: 255, b: 0, a: 255 });
-            case 3: return new cc.color({ r: 0, g: 0, b: 255, a: 255 });
-            case 4: return new cc.color({ r: 255, g: 255, b: 0, a: 255 });
+            case 1: return new cc.color({ r: 156, g: 161, b: 255, a: 255 });
+            case 2: return new cc.color({ r: 66, g: 190, b: 90, a: 255 });
+            case 3: return new cc.color({ r: 253, g: 219, b: 6, a: 255 });
+            case 4: return new cc.color({ r: 241, g: 175, b: 225, a: 255 });
         }
     },
 
