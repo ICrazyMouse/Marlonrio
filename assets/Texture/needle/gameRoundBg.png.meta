@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "5008d6c6-0593-41ed-85d6-7c1847b9243f",
+  "uuid": "674e57b8-f8cc-468c-b623-ca0cf7e82202",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "cutDownPanel": {
+    "gameRoundBg": {
       "ver": "1.0.3",
-      "uuid": "f8ec06e6-71b9-4691-8dce-7ca170c97679",
-      "rawTextureUuid": "5008d6c6-0593-41ed-85d6-7c1847b9243f",
+      "uuid": "96b56208-6dbb-4b0b-be51-c411d9ac5416",
+      "rawTextureUuid": "674e57b8-f8cc-468c-b623-ca0cf7e82202",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 133,
-      "height": 133,
-      "rawWidth": 133,
-      "rawHeight": 133,
+      "width": 68,
+      "height": 69,
+      "rawWidth": 68,
+      "rawHeight": 69,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,
